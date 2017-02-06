@@ -1,11 +1,9 @@
 
 /**
  * Flex Grid -
- * Version: 0.3.5
+ * Version: 0.1.0
  *
  * Simple grid built with flex box and sass.
- *
- * Matthew Simo - matthew.a.simo@gmail.com
  */
 
 /**
@@ -13,7 +11,8 @@
  *
  * The grid will calculate dimensions based on these two variables:
  * $fg-columns will inform the grid loops how many columns there should be.
- * $fg-gutter will inform the grid loops how big eac column's gutters should be.
+ * $fg-gutter will inform the grid loops how big eac column's gutters should be. This should be done with flexbox's space
+ * between and widths instead of negative margins and padding.
  *
  * The grid will name columns, rows, offsets based on these three variables:
  * $fg-class-row string used for the row class
@@ -22,12 +21,11 @@
  */
 $fg-columns: 12 !default;
 $fg-gutter: 0.5rem !default;
+$proj-namespace: 'fg';
 
-$fg-class-row: 'row' !default;
-$fg-class-col: 'col' !default;
-$fg-class-off: 'off' !default;
-
-
+$fg-class-row: '#{$proj-namespace}-row' !default;
+$fg-class-col: '#{$proj-namespace}-col' !default;
+$fg-class-off: '#{$proj-namespace}-off' !default;
 
 /**
  * Break point namespace object
@@ -89,7 +87,7 @@ $fg-breakpoints: (
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  @include spacing( ( -$fg-gutter ), margin, horizontal );
+  justify-content: space-between;
 }
 
 
@@ -100,7 +98,6 @@ $fg-breakpoints: (
   flex-grow: 0;
   flex-shrink: 0;
   min-height: 1px;
-  @include spacing( ( $fg-gutter ), padding, horizontal );
 }
 
 %#{ $fg-class-col }-flex {
@@ -139,6 +136,11 @@ $fg-breakpoints: (
     .#{ $fg-class-col }-#{$namespace}-#{$i} {
       flex-basis: get-col-percent($i);
       max-width:  get-col-percent($i);
+    }
+
+    .#{ $fg-class-col }-#{$namespace}-#{$i}--spaced {
+      flex-basis: calc(#{get-col-percent($i)} - #{$fg-gutter});
+      max-width:  calc(#{get-col-percent($i)} - #{$fg-gutter});
     }
   }
 
